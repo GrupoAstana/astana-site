@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Astana - Aires Acondicionados</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg-100: #f6f8fb;
+      --bg-200: #eef4fb;
+      --accent: #0b3d91;
+      --accent-2: #022b48;
+      --brand-700: #022b48;
+      --muted: #64748b;
+      --card:#ffffff;
+      --radius: 12px;
+      --shadow-1: 0 6px 24px rgba(8,24,48,0.06);
+      --max-width: 1100px;
+      --transition: 220ms cubic-bezier(.2,.9,.3,1);
+      --glass: rgba(255,255,255,0.55);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: 'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+      background: linear-gradient(180deg,var(--bg-100) 0%, var(--bg-200) 100%);
+      color:#0b1220;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.45;
+      padding-bottom:80px;
+      font-size:15px;
+    }
+
+    .wrap{max-width:var(--max-width);margin:0 auto;padding:0 20px;}
+
+    header{position:sticky;top:12px;z-index:80;display:flex;justify-content:center;pointer-events:none}
+    .header-card{pointer-events:auto;width:calc(100% - 40px);max-width:var(--max-width);background:linear-gradient(90deg,#011b35,#012241);color:rgba(255,255,255,0.98);border-radius:16px;box-shadow:var(--shadow-1);border:1px solid rgba(0,0,0,0.06);margin:0}
+    .header-inner{display:flex;align-items:center;gap:14px;justify-content:space-between;padding:12px 16px}
+
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{
+      width:48px;height:48px;border-radius:8px;overflow:hidden;
+      display:flex;align-items:center;justify-content:center;
+      background:linear-gradient(135deg,var(--accent),var(--accent-2));
+      flex:0 0 48px;
+      box-shadow:0 6px 18px rgba(2,35,70,0.18);
+    }
+    .logo img{width:100%;height:100%;object-fit:contain;display:block}
+
+    .brand h1{font-size:17px;margin:0;color:inherit}
+    .brand small{display:block;font-size:12px;color:rgba(255,255,255,0.92);margin-top:2px}
+
+    nav.primary{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    nav.primary a{color:rgba(255,255,255,0.95);text-decoration:none;font-weight:600;padding:7px 10px;border-radius:10px;font-size:13px;background:linear-gradient(180deg,rgba(255,255,255,0.03),transparent);border:1px solid rgba(255,255,255,0.04)}
+    nav.primary a:hover{transform:translateY(-3px);background:rgba(255,255,255,0.06)}
+
+    main{max-width:var(--max-width);margin:24px auto;padding:0 20px;display:block;gap:18px}
+    .hero{display:flex;flex-direction:column;gap:12px;padding:0;border-radius:14px;background:transparent;border:none}
+    .hero-left{padding:22px;border-radius:14px;background:linear-gradient(180deg, rgba(2,35,70,0.03), rgba(2,35,70,0.01));border:1px solid rgba(2,6,23,0.03);box-shadow:var(--shadow-1)}
+    .eyebrow{display:inline-block;background:rgba(11,61,145,0.10);color:var(--accent);padding:6px 8px;border-radius:999px;font-weight:700;font-size:13px;letter-spacing:0.2px}
+    .hero h2{margin:10px 0 6px 0;color:var(--brand-700);font-size:30px}
+    .hero p{margin:0;color:var(--muted);font-size:15px}
+
+    .hero-cta{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+    .btn{
+      display:inline-flex;align-items:center;gap:8px;padding:11px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:700;color:white;
+      background:linear-gradient(180deg,var(--accent),var(--accent-2));
+      text-decoration:none;transition:transform var(--transition), box-shadow var(--transition);
+      box-shadow:0 8px 24px rgba(2,35,70,0.12);
+    }
+    .btn:hover{transform:translateY(-4px);box-shadow:0 16px 36px rgba(2,35,70,0.18)}
+    .btn.secondary{background:transparent;color:var(--brand-700);border:1px solid rgba(2,35,70,0.08)}
+
+    section.card{background:var(--card);border-radius:12px;padding:18px;border:1px solid rgba(2,6,23,0.04);box-shadow:var(--shadow-1);margin-top:16px}
+    section.card h2{font-size:18px;margin:0 0 8px 0}
+
+    details{margin-top:12px}
+    summary{cursor:pointer;font-weight:700;color:var(--brand-700);padding:10px 12px;border-radius:10px;list-style:none;display:flex;align-items:center;justify-content:space-between;border:1px solid rgba(2,6,23,0.04);background:linear-gradient(180deg, rgba(2,35,70,0.02), transparent)}
+    .detalle-contenido{margin-top:10px;color:#334155;line-height:1.6;padding:6px 4px;overflow:hidden;max-height:0;opacity:0;transform:translateY(-6px);transition: max-height 360ms cubic-bezier(.2,.9,.3,1), opacity 260ms ease, transform 280ms ease, padding 200ms}
+    details[data-open="true"] > .detalle-contenido{opacity:1;transform:none;padding-top:10px;padding-bottom:10px;max-height:1200px}
+    .detalle-img{width:100%;height:auto;border-radius:8px;display:block;box-shadow:0 10px 30px rgba(3,12,34,0.06);margin-bottom:8px}
+
+    /* Quick service cards */
+    .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+    .service{background:linear-gradient(180deg,#fff,#fbfdff);padding:14px;border-radius:12px;border:1px solid rgba(2,6,23,0.04);display:flex;gap:12px;align-items:flex-start;cursor:pointer;transition:transform var(--transition), box-shadow var(--transition)}
+    .service:hover{transform:translateY(-6px);box-shadow:0 18px 46px rgba(2,35,70,0.08)}
+    .service .icon{width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:grid;place-items:center;color:#fff;font-weight:800;flex:0 0 56px}
+    .service h3{margin:0;font-size:15px;color:var(--brand-700)}
+    .service p{margin:6px 0 0 0;color:var(--muted);font-size:13px}
+
+    /* Contact: compacto y centrado */
+    .contact-grid{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      justify-content:center;
+      margin-top:12px;
+    }
+
+    .contact-item{
+      background:linear-gradient(180deg,#ffffff,#fbfdff);
+      border-radius:999px;
+      padding:8px 12px;
+      border:1px solid rgba(2,6,23,0.06);
+      display:flex;
+      align-items:center;
+      gap:10px;
+      box-shadow:0 6px 18px rgba(3,12,34,0.04);
+      min-height:44px;
+      transition:transform var(--transition), box-shadow var(--transition);
+    }
+
+    .contact-item:hover{ transform:translateY(-4px); box-shadow:0 14px 34px rgba(3,12,34,0.08); }
+
+    .contact-link{ display:flex; align-items:center; gap:10px; text-decoration:none; color:inherit; align-items:center; }
+
+    .contact-icon{
+      width:40px;
+      height:40px;
+      border-radius:10px;
+      background:linear-gradient(180deg,var(--accent),var(--accent-2));
+      display:grid;
+      place-items:center;
+      color:white;
+      font-weight:700;
+      flex:0 0 40px;
+      font-size:14px;
+      line-height:1;
+    }
+
+    .contact-copy{ display:flex; flex-direction:column; gap:2px; min-width:0; }
+    .contact-copy .label{ font-weight:700; color:var(--brand-700); font-size:13px; white-space:nowrap; }
+    .contact-copy .meta{ color:var(--muted); font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+    /* Emails: dos líneas si es necesario */
+    .contact-item.email .contact-copy .meta{ white-space:normal; overflow:visible; font-weight:600; color:var(--brand-700); }
+
+    /* Banner-sized carousel */
+    .hero-banner{
+      width:100%;
+      margin:0 auto;
+      border-radius:12px;
+      overflow:hidden;
+      box-shadow:0 16px 48px rgba(3,12,34,0.08);
+      background:linear-gradient(180deg,#fff,#f8fbff);
+      position:relative;
+    }
+
+    .hero-banner .slides{
+      width:100%;
+      height:320px;
+      position:relative;
+    }
+
+    .hero-banner .slide{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      opacity:0;
+      transform:scale(1.02) rotate(0.001deg);
+      transition:opacity 560ms cubic-bezier(.2,.9,.3,1), transform 560ms ease, filter 560ms ease;
+      will-change:opacity, transform;
+      filter:grayscale(10%) contrast(105%);
+    }
+
+    .hero-banner .slide[aria-hidden="false"]{
+      opacity:1;
+      transform:none;
+      filter:none;
+    }
+
+    /* botones más grandes y mejor visibles para banner */
+    .carousel-btn{
+      position:absolute;
+      top:50%;
+      transform:translateY(-50%);
+      width:46px;
+      height:46px;
+      border-radius:10px;
+      background:var(--accent-2);
+      color:#fff;
+      border:none;
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      box-shadow:0 10px 30px rgba(3,12,34,0.14);
+      transition:transform 180ms ease, background 180ms ease;
+      font-size:26px;
+      line-height:1;
+      z-index:6;
+    }
+    .carousel-btn:hover{ transform:translateY(-50%) scale(1.04); background:var(--accent); }
+    .carousel-btn.prev{ left:14px; }
+    .carousel-btn.next{ right:14px; }
+
+    .carousel-indicators{
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      bottom:12px;
+      display:flex;
+      gap:10px;
+      z-index:7;
+    }
+
+    .indicator{
+      width:12px;
+      height:12px;
+      border-radius:99px;
+      background:rgba(255,255,255,0.6);
+      border:1px solid rgba(2,35,70,0.12);
+      padding:0;
+      cursor:pointer;
+    }
+    .indicator[aria-selected="true"]{
+      background:var(--accent);
+      transform:scale(1.18);
+      border-color:rgba(2,35,70,0.18);
+    }
+
+    .testimonials{margin-top:16px;display:flex;flex-direction:column;gap:12px}
+    .test-card{background:linear-gradient(180deg,#ffffff,#fbfdff);padding:14px;border-radius:12px;border:1px solid rgba(2,6,23,0.04);box-shadow:var(--shadow-1);display:flex;gap:12px;align-items:flex-start}
+    .star{color:#ffb648;font-weight:800}
+
+    .faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+
+    .float-cta{position:fixed;right:18px;bottom:18px;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:white;padding:12px 16px;border-radius:999px;box-shadow:0 18px 50px rgba(2,35,70,0.18);z-index:90;display:flex;gap:10px;align-items:center;text-decoration:none;font-weight:700}
+    .float-cta:active{transform:scale(0.98)}
+
+    .to-top{position:fixed;left:18px;bottom:18px;width:44px;height:44px;border-radius:10px;background:var(--glass);display:grid;place-items:center;box-shadow:0 10px 30px rgba(3,12,34,0.08);backdrop-filter:blur(6px);cursor:pointer;z-index:90}
+
+    @media (max-width:980px){
+      .services-grid{grid-template-columns:repeat(2,1fr)}
+      .hero-left{order:2;padding:18px}
+      .hero-banner{order:1}
+      .hero-banner .slides{ height:220px; }
+      .header-inner{padding:10px}
+      .contact-grid{gap:10px}
+      .faq-grid{grid-template-columns:1fr}
+    }
+    @media (max-width:540px){
+      .hero-banner .slides{ height:180px; }
+      .carousel-btn{ width:40px;height:40px;font-size:20px; }
+      .contact-item{ width:100%; border-radius:12px; padding:10px 12px; }
+      .contact-grid{ flex-direction:column; align-items:stretch; gap:10px; }
+      .contact-copy .label, .contact-copy .meta{ white-space:normal; }
+      nav.primary{display:none}
+      .brand h1{font-size:16px}
+      header{top:8px}
+      .services-grid{grid-template-columns:1fr}
+    }
+
+    .muted{color:var(--muted)}
+    .highlight{box-shadow:0 10px 40px rgba(2,35,70,0.08);border:1px solid rgba(2,35,70,0.12);transition:box-shadow 300ms, border 300ms}
+
+    .muted-italic{color:var(--muted);font-style:italic}
+    a.ghost{color:var(--brand-700);text-decoration:underline;font-weight:700}
+  </style>
+</head>
+<body>
+
+  <header aria-label="Encabezado del sitio">
+    <div class="header-card">
+      <div class="header-inner wrap">
+        <div class="brand">
+          <div class="logo" aria-hidden="true">
+            <img src="logoast.png" alt="Logo Grupo Astana" />
+          </div>
+          <div>
+            <h1>ASTANA</h1>
+            <small>Climatización y Energía</small>
+          </div>
+        </div>
+
+        <nav class="primary" aria-label="Navegación principal">
+          <a href="#inicio">Inicio</a>
+          <a href="#quienes">Quiénes somos</a>
+          <a href="#aires">Aires</a>
+          <a href="#paneles">Paneles</a>
+          <a href="#electricidad">Electricidad</a>
+          <a href="#refrigeracion">Refrigeración</a>
+          <a href="#otros-servicios">Servicios</a>
+          <a href="#contacto">Contacto</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" role="main">
+    <section class="hero" id="inicio">
+      <div class="hero-left">
+        <span class="eyebrow">Servicio rápido y confiable</span>
+        <h2 id="inicio-heading">Bienvenido a ASTANA</h2>
+        <p>Especialistas en aires acondicionados, paneles solares e instalaciones eléctricas. Soluciones eficientes para hogares y empresas.</p>
+
+        <div class="hero-cta">
+          <a class="btn" href="#contacto">Contáctanos</a>
+          <a class="btn secondary" href="#aires">Nuestros servicios</a>
+          <a class="btn" href="#paneles" title="Ver promoción">Promoción 10% Paneles</a>
+        </div>
+
+        <div class="services-grid" aria-hidden="false">
+          <div class="service" role="button" tabindex="0" data-target="#aires">
+            <div class="icon">AC</div>
+            <div>
+              <h3>Instalación AC Rápida</h3>
+              <p>Presupuesto en 24 horas y plan de instalación express.</p>
+            </div>
+          </div>
+
+          <div class="service" role="button" tabindex="0" data-target="#paneles">
+            <div class="icon">☀</div>
+            <div>
+              <h3>Paneles Fotovoltaicos</h3>
+              <p>Dimensionamiento y opciones de pago según tu proyecto.</p>
+            </div>
+          </div>
+
+          <div class="service" role="button" tabindex="0" data-target="#contacto">
+            <div class="icon">⚡</div>
+            <div>
+              <h3>Soporte eléctrico profesional</h3>
+              <p>Mantenimiento y atención programada para instalaciones.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-banner" role="region" aria-label="Galería de servicios ASTANA">
+        <div class="slides">
+          <img src="hvca1.jpeg" alt="HVAC ASTANA 1" class="slide" />
+          <img src="hvca2.jpeg" alt="HVAC ASTANA 2" class="slide" />
+          <img src="hvca3.jpeg" alt="HVAC ASTANA 3" class="slide" />
+        </div>
+
+        <button class="carousel-btn prev" aria-label="Anterior">‹</button>
+        <button class="carousel-btn next" aria-label="Siguiente">›</button>
+
+        <div class="carousel-indicators" role="tablist" aria-label="Indicadores del carrusel">
+          <button class="indicator" data-index="0" aria-label="Slide 1" role="tab" aria-selected="true"></button>
+          <button class="indicator" data-index="1" aria-label="Slide 2" role="tab" aria-selected="false"></button>
+          <button class="indicator" data-index="2" aria-label="Slide 3" role="tab" aria-selected="false"></button>
+        </div>
+      </div>
+    </section>
+
+    <section id="quienes" class="card" aria-labelledby="quienes-heading">
+      <h2 id="quienes-heading">¿Quiénes somos?</h2>
+      <p class="muted">Empresa comprometida con calidad, instalaciones seguras y soluciones sostenibles para hogares y negocios.</p>
+
+      <div class="testimonials" aria-label="Testimonios de clientes">
+        <div class="test-card">
+          <div style="width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:grid;place-items:center;color:#fff;font-weight:800">JM</div>
+          <div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <strong>José M.</strong>
+              <div class="star">★★★★★</div>
+            </div>
+            <div class="muted-italic">"Instalación impecable y asesoría para ahorrar en la factura. 100% recomendados."</div>
+          </div>
+        </div>
+
+        <div class="test-card">
+          <div style="width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,#ffc857,#ff7b7b);display:grid;place-items:center;color:#fff;font-weight:800">LA</div>
+          <div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <strong>Laura A.</strong>
+              <div class="star">★★★★★</div>
+            </div>
+            <div class="muted-italic">"Rápidos, limpios y con seguimiento post-instalación. Excelente servicio."</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="aires" class="card" aria-labelledby="aires-heading">
+      <h2 id="aires-heading">Aires Acondicionados</h2>
+
+      <details>
+        <summary>
+          <div class="label"><span>Empresarial / Comercial</span></div>
+          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="#022b48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="detalle-contenido">
+          <img src="Fotoemp.jpeg" alt="Instalación Empresarial Grupo Astana" class="detalle-img" />
+          <p class="muted">Instalaciones a medida, mantenimiento preventivo y contratos para grandes superficies.</p>
+          <div style="margin-top:8px;display:flex;gap:8px">
+            <a class="btn" href="#contacto">Solicitar Cotización</a>
+            <button class="btn secondary" onclick="openSchedule('comercial')">Agendar visita</button>
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <div class="label"><span>Residencial</span></div>
+          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="#022b48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="detalle-contenido">
+          <img src="fotores.jpeg" alt="Instalación Residencial Grupo Astana" class="detalle-img" />
+          <p class="muted">Soluciones eficientes y silenciosas para tu hogar, con asesoría en ahorro energético.</p>
+          <div style="margin-top:8px;display:flex;gap:8px">
+            <a class="btn" href="#contacto">Pedir asesoría gratis</a>
+            <button class="btn secondary" onclick="openSchedule('residencial')">Ver plan de instalación</button>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <section id="paneles" class="card" aria-labelledby="paneles-heading">
+      <details id="paneles-details">
+        <summary>
+          <div class="label"><h2 id="paneles-heading" style="margin:0;font-size:18px">Paneles Solares</h2></div>
+          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="#022b48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="detalle-contenido">
+          <img src="pansol.jpeg" alt="Paneles Solares Grupo Astana" class="detalle-img" />
+          <p class="muted">Instalaciones fotovoltaicas, dimensionamiento y mantenimiento.</p>
+          <div style="margin-top:8px;display:flex;gap:8px">
+            <a class="btn" href="#contacto">Calcular ahorro</a>
+            <a class="btn secondary" href="#contacto">Consultar opciones de pago</a>
+          </div>
+        </div>
+      </details>
+
+      <div style="margin-top:12px">
+        <h4 style="margin:0 0 8px 0">Preguntas frecuentes sobre paneles</h4>
+        <div class="faq-grid">
+          <details>
+            <summary>¿Cuánto se tarda la instalación?</summary>
+            <div class="detalle-contenido">Instalaciones residenciales típicas: 1-3 días según el tamaño y condiciones.</div>
+          </details>
+          <details>
+            <summary>¿Ofrecen financiamiento?</summary>
+            <div class="detalle-contenido">Actualmente no ofrecemos financiamiento directo. Consultanos para ver alternativas y opciones de pago disponibles.</div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section id="electricidad" class="card" aria-labelledby="electricidad-heading">
+      <h2 id="electricidad-heading">Electricidad</h2>
+      <p class="muted">Instalaciones residenciales, comerciales e industriales; puestas a tierra y sistemas de protección.</p>
+
+      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+        <a class="btn" href="#contacto">Solicitar revisión eléctrica</a>
+        <button class="btn secondary" onclick="showTip('tierra')">¿Qué es puesta a tierra?</button>
+      </div>
+    </section>
+
+    <section id="refrigeracion" class="card" aria-labelledby="refrigeracion-heading">
+      <h2 id="refrigeracion-heading">Refrigeración</h2>
+      <p class="muted">Instalación y mantenimiento de sistemas de refrigeración comercial e industrial.</p>
+
+      <details>
+        <summary>Contratos de mantenimiento</summary>
+        <div class="detalle-contenido">Paquetes mensuales y anuales con seguimiento remoto y visitas programadas.</div>
+      </details>
+    </section>
+
+    <section id="otros-servicios" class="card" aria-labelledby="otros-heading">
+      <h2 id="otros-heading">Otros Servicios</h2>
+      <ul style="margin-top:10px;color:var(--muted)">
+        <li>Tablaroca</li>
+        <li>Fontanería</li>
+        <li>Automatización</li>
+        <li>Control Eléctrico</li>
+        <li>Mantenimiento Industrial</li>
+      </ul>
+
+      <p style="margin-top:12px"><a class="ghost" href="#contacto">Solicita una evaluación integral</a></p>
+    </section>
+
+    <section id="contacto" class="card" aria-labelledby="contacto-heading">
+      <h2 id="contacto-heading">Contacto</h2>
+
+      <div class="contact-grid" role="list">
+        <div class="contact-item" role="listitem" aria-label="Dirección General">
+          <a class="contact-link" href="https://wa.me/message/QLHEER2APBZHD1" target="_blank" rel="noopener">
+            <div class="contact-icon" aria-hidden="true">
+              <!-- Icono SVG de persona (monito) -->
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5z" fill="white" opacity="0.95"/>
+                <path d="M3 21c0-3.866 3.582-7 9-7s9 3.134 9 7v1H3v-1z" fill="white" opacity="0.95"/>
+              </svg>
+            </div>
+            <div class="contact-copy">
+              <div class="label">Dirección General</div>
+              <div class="meta">+52 33 3198 8650</div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Bloque actualizado: Atención a Clientes con icono de auriculares y etiqueta en mayúsculas -->
+        <div class="contact-item" role="listitem" aria-label="Atencion a Clientes">
+          <a class="contact-link" href="https://wa.me/message/CSUINW3LM5KXF1" target="_blank" rel="noopener">
+            <div class="contact-icon" aria-hidden="true">
+              <!-- Icono SVG de auriculares / diadema -->
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 3C7.03 3 3 7.03 3 12v3a3 3 0 0 0 3 3h1a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1H6v-1a6 6 0 0 1 12 0v1h-2a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h1a3 3 0 0 0 3-3v-3c0-4.97-4.03-9-9-9z" fill="white" opacity="0.95"/>
+                <path d="M6 15H5a1 1 0 0 1-1-1v-1h2v2zM19 15h-1v-2h2v1a1 1 0 0 1-1 1z" fill="white" opacity="0.95"/>
+              </svg>
+            </div>
+            <div class="contact-copy">
+              <div class="label">Atención a Clientes</div>
+              <div class="meta">+52 33 1197 8118</div>
+            </div>
+          </a>
+        </div>
+
+        <div class="contact-item email" role="listitem" aria-label="Correos">
+          <a class="contact-link" href="mailto:atencionaclientes.astana@gmail.com">
+            <div class="contact-icon" aria-hidden="true">@</div>
+            <div class="contact-copy">
+              <div class="label">Correos</div>
+              <div class="meta">
+                <a href="mailto:Adrian.cruz.ext@gmail.com" style="color:inherit;text-decoration:none;">Adrian.cruz.ext@gmail.com</a><br>
+                <a href="mailto:atencionaclientes.astana@gmail.com" style="color:inherit;text-decoration:none;">atencionaclientes.astana@gmail.com</a>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div class="contact-item" role="listitem" aria-label="Ubicación">
+          <a class="contact-link" href="https://maps.app.goo.gl/eSKT4MSDTGvLZb5p6" target="_blank" rel="noopener">
+            <div class="contact-icon" aria-hidden="true">📍</div>
+            <div class="contact-copy">
+              <div class="label">Ubicación</div>
+              <div class="meta">El Zapote del Valle, Jal · Lun-Vie 8:30–18:00 · Sáb 8:30–14:30</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <form id="contactForm" style="margin-top:14px;display:grid;gap:8px" onsubmit="submitForm(event)">
+        <input type="text" id="name" name="name" placeholder="Tu nombre" required style="padding:10px;border-radius:10px;border:1px solid rgba(2,6,23,0.06)">
+        <input type="email" id="email" name="email" placeholder="Tu correo" required style="padding:10px;border-radius:10px;border:1px solid rgba(2,6,23,0.06)">
+        <textarea id="msg" name="msg" placeholder="Mensaje o consulta" rows="3" style="padding:10px;border-radius:10px;border:1px solid rgba(2,6,23,0.06)"></textarea>
+        <div style="display:flex;gap:8px">
+          <button class="btn" type="submit">Enviar</button>
+          <button type="button" class="btn secondary" onclick="prefillDemo()">Ejemplo</button>
+        </div>
+        <div id="formResult" aria-live="polite" style="color:var(--muted);font-size:13px"></div>
+      </form>
+
+    </section>
+  </main>
+
+  <footer style="padding:18px 20px;margin-top:18px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+    <div class="footer-left">&copy; 2025 ASTANA</div>
+    <nav class="footer-nav" aria-label="Enlaces del pie de página" style="display:flex;gap:12px">
+      <a href="#inicio">Inicio</a>
+      <a href="#quienes">Quiénes somos</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+  </footer>
+
+  <a class="float-cta" href="https://wa.me/message/QLHEER2APBZHD1" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp Dirección General">
+    💬 <span>Contacto rápido</span>
+  </a>
+
+  <button class="to-top" aria-label="Ir arriba" title="Ir arriba" onclick="scrollToTop()">↑</button>
+
+  <script>
+    (function() {
+      const DURATION = 700;
+      const HIGHLIGHT_MS = 1800;
+
+      function easeInOutQuad(t){ return t<0.5 ? 2*t*t : -1+(4-2*t)*t; }
+      function getHeaderOffset(){ const header = document.querySelector('header'); return header ? header.offsetHeight + 8 : 0; }
+
+      function scrollToY(targetY, duration){
+        const startY = window.scrollY || window.pageYOffset;
+        const diff = targetY - startY;
+        const start = performance.now();
+        return new Promise(resolve=>{
+          function frame(now){
+            const elapsed = now - start;
+            const progress = Math.min(1, elapsed / duration);
+            const eased = easeInOutQuad(progress);
+            window.scrollTo(0, Math.round(startY + diff*eased));
+            if(progress < 1) requestAnimationFrame(frame);
+            else resolve();
+          }
+          requestAnimationFrame(frame);
+        });
+      }
+
+      function highlightElement(el, ms){
+        if(!el) return;
+        el.classList.remove('highlight');
+        void el.offsetWidth;
+        el.classList.add('highlight');
+        clearTimeout(el._highlightTimeout);
+        el._highlightTimeout = setTimeout(()=>el.classList.remove('highlight'), ms);
+      }
+
+      async function handleAnchorClick(e){
+        const link = e.currentTarget;
+        const href = link.getAttribute('href');
+        if(!href || href.charAt(0) !== '#') return;
+        const id = href.slice(1);
+        const target = document.getElementById(id);
+        if(!target) return;
+        e.preventDefault();
+
+        const detailsParent = target.closest('details');
+        if(detailsParent && !detailsParent.open){
+          detailsParent.open = true;
+          const content = detailsParent.querySelector('.detalle-contenido');
+          if(content){
+            content.style.maxHeight = content.scrollHeight + 'px';
+            detailsParent.setAttribute('data-open','true');
+          }
+          await new Promise(r=>setTimeout(r,120));
+        }
+
+        const rect = target.getBoundingClientRect();
+        const offsetTop = window.scrollY + rect.top - getHeaderOffset() - 12;
+        await scrollToY(offsetTop, DURATION);
+
+        highlightElement(target, HIGHLIGHT_MS);
+
+        if(history.pushState) history.pushState(null,'','#'+id);
+        else location.hash = '#'+id;
+      }
+
+      function initAnchors(){
+        document.querySelectorAll('a[href^="#"]').forEach(a=>{
+          const href = a.getAttribute('href');
+          if(!href || href === '#') return;
+          a.addEventListener('click', handleAnchorClick, {passive:false});
+        });
+      }
+
+      function initDetails(){
+        document.querySelectorAll('details').forEach(detail=>{
+          const content = detail.querySelector('.detalle-contenido');
+          if(content){
+            detail.setAttribute('data-open', detail.open ? 'true' : 'false');
+            content.style.maxHeight = detail.open ? content.scrollHeight + 'px' : '0px';
+          }
+          detail.addEventListener('toggle', ()=>{
+            const c = detail.querySelector('.detalle-contenido');
+            if(!c) return;
+            setTimeout(()=>{
+              if(detail.open){
+                c.style.maxHeight = c.scrollHeight + 'px';
+                detail.setAttribute('data-open','true');
+              } else {
+                c.style.maxHeight = '0px';
+                detail.setAttribute('data-open','false');
+              }
+            }, 32);
+          });
+          detail.querySelectorAll('img').forEach(img=>{
+            if(!img.complete){
+              img.addEventListener('load', ()=>{
+                const c = detail.querySelector('.detalle-contenido');
+                if(detail.open && c) c.style.maxHeight = c.scrollHeight + 'px';
+              });
+            }
+          });
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', ()=>{
+        initAnchors();
+        initDetails();
+
+        // clickable service cards scrolling to sections
+        document.querySelectorAll('.service').forEach(card=>{
+          card.addEventListener('click', ()=> {
+            const t = card.dataset.target;
+            if(!t) return;
+            const el = document.querySelector(t);
+            if(!el) return;
+            el.scrollIntoView({behavior:'smooth', block:'start'});
+            highlightElement(el, 1400);
+          });
+          card.addEventListener('keydown', (e)=>{
+            if(e.key === 'Enter' || e.key === ' ') card.click();
+          });
+        });
+
+      });
+
+      window.addEventListener('load', ()=>{
+        const hash = location.hash;
+        if(hash){
+          const id = hash.slice(1);
+          const el = document.getElementById(id);
+          if(el){
+            setTimeout(async ()=>{
+              const detailsParent = el.closest('details');
+              if(detailsParent && !detailsParent.open){
+                detailsParent.open = true;
+                const content = detailsParent.querySelector('.detalle-contenido');
+                if(content){
+                  content.style.maxHeight = content.scrollHeight + 'px';
+                  detailsParent.setAttribute('data-open','true');
+                }
+                await new Promise(r=>setTimeout(r,120));
+              }
+              const rect = el.getBoundingClientRect();
+              const target = window.scrollY + rect.top - getHeaderOffset() - 12;
+              await scrollToY(target, DURATION);
+              highlightElement(el, 1800);
+            }, 120);
+          }
+        }
+      });
+
+    })();
+
+    // Carrusel banner automático (mejorado: pausa en foco)
+    (function(){
+      const carousel = document.querySelector('.hero-banner');
+      if(!carousel) return;
+
+      const slides = Array.from(carousel.querySelectorAll('.slide'));
+      const prevBtn = carousel.querySelector('.carousel-btn.prev');
+      const nextBtn = carousel.querySelector('.carousel-btn.next');
+      const indicators = Array.from(carousel.querySelectorAll('.indicator'));
+
+      let index = 0;
+      const INTERVAL = 3800;
+      let timer = null;
+      let isPaused = false;
+
+      function show(i, focusIndicator = true){
+        i = (i + slides.length) % slides.length;
+        slides.forEach((s,idx)=>{
+          const hidden = idx !== i;
+          s.setAttribute('aria-hidden', hidden ? 'true' : 'false');
+        });
+        indicators.forEach((btn,idx)=>{
+          const sel = idx === i;
+          btn.setAttribute('aria-selected', sel ? 'true' : 'false');
+          if(sel && focusIndicator) btn.focus({preventScroll:true});
+        });
+        index = i;
+      }
+
+      function next(){ show(index + 1); }
+      function prev(){ show(index - 1); }
+
+      function startTimer(){
+        stopTimer();
+        timer = setInterval(()=>{ if(!isPaused) next(); }, INTERVAL);
+      }
+      function stopTimer(){ if(timer) { clearInterval(timer); timer = null; } }
+
+      nextBtn.addEventListener('click', ()=>{
+        next();
+        startTimer();
+      });
+      prevBtn.addEventListener('click', ()=>{
+        prev();
+        startTimer();
+      });
+
+      indicators.forEach(btn=>{
+        btn.addEventListener('click', (e)=>{
+          const i = Number(btn.dataset.index);
+          show(i, false);
+          startTimer();
+        });
+        btn.addEventListener('keydown', (e)=>{
+          if(e.key === 'ArrowLeft') prev();
+          if(e.key === 'ArrowRight') next();
+        });
+      });
+
+      carousel.addEventListener('mouseenter', ()=>{ isPaused = true; });
+      carousel.addEventListener('mouseleave', ()=>{ isPaused = false; });
+      carousel.addEventListener('focusin', ()=>{ isPaused = true; });
+      carousel.addEventListener('focusout', ()=>{ isPaused = false; });
+
+      slides.forEach(s=> s.setAttribute('aria-hidden','true'));
+      show(0);
+      startTimer();
+
+    })();
+
+    // helpers: floating interactions, form demo, scroll top, tips
+    function scrollToTop(){
+      const start = window.scrollY || window.pageYOffset;
+      const startT = performance.now();
+      const duration = 550;
+      function tick(now){
+        const p = Math.min(1, (now - startT)/duration);
+        const eased = p < 0.5 ? 2*p*p : -1+(4-2*p)*p;
+        window.scrollTo(0, Math.round(start - start*eased));
+        if(p < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+
+    function openSchedule(type){
+      const msg = type === 'comercial' ? 'Ha seleccionado agendar visita comercial.' : 'Ha seleccionado agendar visita residencial.';
+      alert(msg + '\nTe dirigimos al formulario de contacto.');
+      document.getElementById('contactForm').scrollIntoView({behavior:'smooth', block:'center'});
+    }
+
+    function showTip(key){
+      if(key === 'tierra'){
+        alert('Puesta a tierra: conexión segura que desvía corrientes a tierra para proteger personas y equipos.');
+      }
+    }
+
+    function prefillDemo(){
+      document.getElementById('name').value = 'Ricardo';
+      document.getElementById('email').value = 'ricardo@ejemplo.com';
+      document.getElementById('msg').value = 'Hola, quisiera un presupuesto para instalación de 3 paneles solares.';
+    }
+
+    function submitForm(e){
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const msg = document.getElementById('msg').value.trim();
+      const result = document.getElementById('formResult');
+      if(!name || !email){
+        result.textContent = 'Completa nombre y correo.';
+        return;
+      }
+      // Simulación de envío
+      result.textContent = 'Enviando...';
+      setTimeout(()=> {
+        result.textContent = 'Gracias ' + name + '. Tu mensaje fue recibido. Te contactaremos pronto.';
+        document.getElementById('contactForm').reset();
+      }, 900);
+    }
+
+    // small accessibility tweak: keyboard shortcuts
+    document.addEventListener('keydown', (e)=>{
+      // "t" to jump to contact
+      if(e.key === 't' || e.key === 'T'){
+        const el = document.getElementById('contacto');
+        if(el){ el.scrollIntoView({behavior:'smooth', block:'start'}); highlight(el); }
+      }
+    });
+
+    function highlight(el){
+      el.classList.add('highlight');
+      setTimeout(()=>el.classList.remove('highlight'), 1600);
+    }
+  </script>
+</body>
+</html>
