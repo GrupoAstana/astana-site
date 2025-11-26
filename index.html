@@ -9,6 +9,8 @@
     :root{
       --bg-100: #f6f8fb;
       --bg-200: #eef4fb;
+      --bg-300: #e6eef9;
+      --bg-ink: rgba(2,35,70,0.06);
       --accent: #0b3d91;
       --accent-2: #022b48;
       --brand-700: #022b48;
@@ -18,7 +20,6 @@
       --shadow-1: 0 6px 24px rgba(8,24,48,0.06);
       --max-width: 1100px;
       --transition: 220ms cubic-bezier(.2,.9,.3,1);
-      --glass: rgba(255,255,255,0.55);
     }
 
     *{box-sizing:border-box}
@@ -26,18 +27,49 @@
     body{
       margin:0;
       font-family: 'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, Arial;
-      background: linear-gradient(180deg,var(--bg-100) 0%, var(--bg-200) 100%);
+      background:
+        radial-gradient(1200px 600px at 85% -10%, rgba(11,61,145,0.12) 0%, rgba(11,61,145,0.00) 48%),
+        radial-gradient(900px 600px at -10% 20%, rgba(2,43,72,0.10) 0%, rgba(2,43,72,0.00) 55%),
+        linear-gradient(180deg,var(--bg-100) 0%, var(--bg-300) 38%, var(--bg-200) 100%);
       color:#0b1220;
       -webkit-font-smoothing:antialiased;
       -moz-osx-font-smoothing:grayscale;
       line-height:1.45;
       padding-bottom:80px;
       font-size:15px;
+      scroll-behavior:smooth;
+      position:relative;
+      overflow-x:hidden;
     }
 
-    .wrap{max-width:var(--max-width);margin:0 auto;padding:0 20px;}
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background-image:
+        linear-gradient(0deg, rgba(255,255,255,0.08) 0.5px, transparent 0.5px),
+        linear-gradient(90deg, rgba(255,255,255,0.05) 0.5px, transparent 0.5px);
+      background-size: 32px 32px, 36px 36px;
+      opacity:0.25;
+      mix-blend-mode:luminosity;
+      z-index:0;
+    }
+
+    .wrap{max-width:var(--max-width);margin:0 auto;padding:0 20px;position:relative;z-index:1;}
 
     header{position:sticky;top:12px;z-index:80;display:flex;justify-content:center;pointer-events:none}
+    header::before{
+      content:"";
+      position:absolute;
+      top:-24px; left:0; right:0; height:80px;
+      background:radial-gradient(500px 48px at 50% 100%, rgba(11,61,145,0.14) 0%, rgba(11,61,145,0.00) 70%);
+      filter:blur(10px);
+      opacity:0.25;
+      pointer-events:none;
+      z-index:0;
+    }
+
     .header-card{pointer-events:auto;width:calc(100% - 40px);max-width:var(--max-width);background:linear-gradient(90deg,#011b35,#012241);color:rgba(255,255,255,0.98);border-radius:16px;box-shadow:var(--shadow-1);border:1px solid rgba(0,0,0,0.06);margin:0}
     .header-inner{display:flex;align-items:center;gap:14px;justify-content:space-between;padding:12px 16px}
 
@@ -55,10 +87,34 @@
     .brand small{display:block;font-size:12px;color:rgba(255,255,255,0.92);margin-top:2px}
 
     nav.primary{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-    nav.primary a{color:rgba(255,255,255,0.95);text-decoration:none;font-weight:600;padding:7px 10px;border-radius:10px;font-size:13px;background:linear-gradient(180deg,rgba(255,255,255,0.03),transparent);border:1px solid rgba(255,255,255,0.04)}
+    nav.primary a{
+      color:rgba(255,255,255,0.95);
+      text-decoration:none;
+      font-weight:600;
+      padding:7px 10px;
+      border-radius:10px;
+      font-size:13px;
+      background:linear-gradient(180deg,rgba(255,255,255,0.03),transparent);
+      border:1px solid rgba(255,255,255,0.04);
+      transition:background 240ms ease, box-shadow 240ms ease, transform 180ms ease;
+    }
     nav.primary a:hover{transform:translateY(-3px);background:rgba(255,255,255,0.06)}
+    nav.primary a.active{
+      background:rgba(255,255,255,0.12);
+      border-color:rgba(255,255,255,0.18);
+      box-shadow:0 6px 18px rgba(255,255,255,0.20);
+    }
 
-    main{max-width:var(--max-width);margin:24px auto;padding:0 20px;display:block;gap:18px}
+    main{max-width:var(--max-width);margin:24px auto;padding:0 20px;display:block;gap:18px;position:relative;z-index:1}
+    main .card + .card{position:relative}
+    main .card + .card::before{
+      content:"";
+      position:absolute;
+      top:-12px; left:18px; right:18px; height:1px;
+      background:linear-gradient(90deg, rgba(2,35,70,0.00), rgba(2,35,70,0.12), rgba(2,35,70,0.00));
+      opacity:0.6;
+    }
+
     .hero{display:flex;flex-direction:column;gap:12px;padding:0;border-radius:14px;background:transparent;border:none}
     .hero-left{padding:22px;border-radius:14px;background:linear-gradient(180deg, rgba(2,35,70,0.03), rgba(2,35,70,0.01));border:1px solid rgba(2,6,23,0.03);box-shadow:var(--shadow-1)}
     .eyebrow{display:inline-block;background:rgba(11,61,145,0.10);color:var(--accent);padding:6px 8px;border-radius:999px;font-weight:700;font-size:13px;letter-spacing:0.2px}
@@ -75,16 +131,35 @@
     .btn:hover{transform:translateY(-4px);box-shadow:0 16px 36px rgba(2,35,70,0.18)}
     .btn.secondary{background:transparent;color:var(--brand-700);border:1px solid rgba(2,35,70,0.08)}
 
-    section.card{background:var(--card);border-radius:12px;padding:18px;border:1px solid rgba(2,6,23,0.04);box-shadow:var(--shadow-1);margin-top:16px}
+    section.card{background:var(--card);border-radius:12px;padding:18px;border:1px solid rgba(2,6,23,0.04);box-shadow:var(--shadow-1);margin-top:16px;position:relative}
+    section.card::after{
+      content:"";
+      position:absolute;
+      inset:-10px -8px -10px -8px;
+      background:radial-gradient(800px 300px at 10% -20%, rgba(2,35,70,0.06) 0%, rgba(2,35,70,0.00) 55%);
+      z-index:-1;
+      filter:blur(2px);
+      opacity:0.6;
+    }
     section.card h2{font-size:18px;margin:0 0 8px 0}
 
     details{margin-top:12px}
     summary{cursor:pointer;font-weight:700;color:var(--brand-700);padding:10px 12px;border-radius:10px;list-style:none;display:flex;align-items:center;justify-content:space-between;border:1px solid rgba(2,6,23,0.04);background:linear-gradient(180deg, rgba(2,35,70,0.02), transparent)}
-    .detalle-contenido{margin-top:10px;color:#334155;line-height:1.6;padding:6px 4px;overflow:hidden;max-height:0;opacity:0;transform:translateY(-6px);transition: max-height 360ms cubic-bezier(.2,.9,.3,1), opacity 260ms ease, transform 280ms ease, padding 200ms}
+    .detalle-contenido{margin-top:10px;color:#334155;line-height:1.6;padding:6px 4px;overflow:hidden;max-height:0;opacity:0;transform:translateY(-6px);transition: max-height 420ms cubic-bezier(.25,.8,.25,1), opacity 360ms ease, transform 360ms ease, padding 240ms}
     details[data-open="true"] > .detalle-contenido{opacity:1;transform:none;padding-top:10px;padding-bottom:10px;max-height:1200px}
     .detalle-img{width:100%;height:auto;border-radius:8px;display:block;box-shadow:0 10px 30px rgba(3,12,34,0.06);margin-bottom:8px}
 
-    /* Quick service cards */
+    .detalle-contenido.full-bleed { padding: 0; }
+    .detalle-img.refrigeracion {
+      width: 100%;
+      height: auto;
+      max-height: none;
+      object-fit: cover;
+      display: block;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
     .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
     .service{background:linear-gradient(180deg,#fff,#fbfdff);padding:14px;border-radius:12px;border:1px solid rgba(2,6,23,0.04);display:flex;gap:12px;align-items:flex-start;cursor:pointer;transition:transform var(--transition), box-shadow var(--transition)}
     .service:hover{transform:translateY(-6px);box-shadow:0 18px 46px rgba(2,35,70,0.08)}
@@ -92,7 +167,6 @@
     .service h3{margin:0;font-size:15px;color:var(--brand-700)}
     .service p{margin:6px 0 0 0;color:var(--muted);font-size:13px}
 
-    /* Contact: compacto y centrado */
     .contact-grid{
       display:flex;
       gap:12px;
@@ -136,10 +210,8 @@
     .contact-copy .label{ font-weight:700; color:var(--brand-700); font-size:13px; white-space:nowrap; }
     .contact-copy .meta{ color:var(--muted); font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
-    /* Emails: dos líneas si es necesario */
     .contact-item.email .contact-copy .meta{ white-space:normal; overflow:visible; font-weight:600; color:var(--brand-700); }
 
-    /* Banner-sized carousel */
     .hero-banner{
       width:100%;
       margin:0 auto;
@@ -164,18 +236,16 @@
       object-fit:cover;
       opacity:0;
       transform:scale(1.02) rotate(0.001deg);
-      transition:opacity 560ms cubic-bezier(.2,.9,.3,1), transform 560ms ease, filter 560ms ease;
+      transition:opacity 900ms cubic-bezier(.25,.8,.25,1), transform 900ms cubic-bezier(.25,.8,.25,1), filter 900ms cubic-bezier(.25,.8,.25,1);
       will-change:opacity, transform;
       filter:grayscale(10%) contrast(105%);
     }
-
     .hero-banner .slide[aria-hidden="false"]{
       opacity:1;
       transform:none;
       filter:none;
     }
 
-    /* botones más grandes y mejor visibles para banner */
     .carousel-btn{
       position:absolute;
       top:50%;
@@ -217,6 +287,7 @@
       border:1px solid rgba(2,35,70,0.12);
       padding:0;
       cursor:pointer;
+      transition:transform 200ms ease, background 200ms ease;
     }
     .indicator[aria-selected="true"]{
       background:var(--accent);
@@ -230,37 +301,280 @@
 
     .faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
 
-    .float-cta{position:fixed;right:18px;bottom:18px;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:white;padding:12px 16px;border-radius:999px;box-shadow:0 18px 50px rgba(2,35,70,0.18);z-index:90;display:flex;gap:10px;align-items:center;text-decoration:none;font-weight:700}
-    .float-cta:active{transform:scale(0.98)}
+    .services-carousel{
+      position:relative;
+      border-radius:12px;
+      overflow:visible;
+      background:linear-gradient(180deg,#fff,#fbfdff);
+      border:1px solid rgba(2,6,23,0.04);
+      box-shadow:var(--shadow-1);
+      padding:12px;
+    }
 
-    .to-top{position:fixed;left:18px;bottom:18px;width:44px;height:44px;border-radius:10px;background:var(--glass);display:grid;place-items:center;box-shadow:0 10px 30px rgba(3,12,34,0.08);backdrop-filter:blur(6px);cursor:pointer;z-index:90}
+    .services-carousel .viewport{
+      overflow:hidden;
+      position:relative;
+      width:100%;
+    }
 
+    .services-carousel .slides{
+      display:flex;
+      gap:12px;
+      transition:transform 600ms cubic-bezier(.25,.8,.25,1);
+      will-change:transform;
+    }
+
+    .services-carousel .slide{
+      min-width:100%;
+      flex:0 0 100%;
+      border-radius:10px;
+      overflow:hidden;
+      display:block;
+      position:relative;
+      background:linear-gradient(180deg,#fff,#f8fbff);
+      padding:6px;
+      box-sizing:border-box;
+    }
+
+    .services-carousel .slide img{
+      width:100%;
+      height:auto;
+      max-height:520px;
+      object-fit:contain;
+      display:block;
+      margin:0 auto;
+      border-radius:8px;
+      box-shadow:0 10px 30px rgba(3,12,34,0.06);
+      background:linear-gradient(180deg,#f6f8fb,#eef4fb);
+    }
+
+    .services-carousel .caption{
+      position:absolute;
+      left:18px;
+      bottom:18px;
+      background:rgba(2,35,70,0.9);
+      color:white;
+      padding:10px 12px;
+      border-radius:10px;
+      font-weight:700;
+      box-shadow:0 8px 24px rgba(2,35,70,0.12);
+      max-width:70%;
+    }
+
+    .services-carousel .thumbs{
+      display:flex;
+      gap:8px;
+      margin-top:12px;
+      justify-content:center;
+    }
+    .services-carousel .thumb{
+      width:86px;
+      height:56px;
+      border-radius:8px;
+      overflow:hidden;
+      cursor:pointer;
+      border:2px solid transparent;
+      transition:transform 200ms ease, border 200ms ease, box-shadow 200ms ease;
+    }
+    .services-carousel .thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+    .services-carousel .thumb[aria-selected="true"]{ border-color:var(--accent); transform:scale(1.03); box-shadow:0 8px 20px rgba(2,35,70,0.08); }
+
+    .services-carousel .nav{
+      position:absolute;
+      top:50%;
+      transform:translateY(-50%);
+      width:44px;
+      height:44px;
+      border-radius:10px;
+      background:var(--accent-2);
+      color:#fff;
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      border:none;
+      box-shadow:0 10px 30px rgba(3,12,34,0.14);
+      z-index:6;
+    }
+    .services-carousel .nav:hover{ background:var(--accent); transform:translateY(-50%) scale(1.03); }
+    .services-carousel .nav.prev{ left:12px; }
+    .services-carousel .nav.next{ right:12px; }
+
+    .quick-contact {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 140;
+      width: 64px;
+      height: 64px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, var(--accent), var(--accent-2));
+      display: grid;
+      place-items: center;
+      box-shadow: 0 12px 36px rgba(2,35,70,0.22);
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+      cursor: pointer;
+    }
+    .quick-contact:focus,
+    .quick-contact:hover {
+      transform: translateY(-6px) scale(1.03);
+      box-shadow: 0 20px 48px rgba(2,35,70,0.28);
+      background: linear-gradient(180deg, #0e4aa8, #01283f);
+      outline: none;
+    }
+    .quick-contact .icon {
+      color: #fff;
+      font-weight: 800;
+      font-size: 22px;
+      line-height: 1;
+      user-select: none;
+    }
+    .quick-contact .badge {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      min-width: 22px;
+      height: 22px;
+      padding: 0 6px;
+      border-radius: 999px;
+      background: #ff5a5a;
+      color: white;
+      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 18px rgba(255,90,90,0.18);
+    }
+    .quick-contact .sr-label {
+      position: absolute;
+      left: -9999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+
+    @keyframes sectionFlash {
+      0% { box-shadow: 0 0 0 rgba(11,61,145,0); }
+      50% { box-shadow: 0 0 0 8px rgba(11,61,145,0.12); }
+      100% { box-shadow: 0 0 0 rgba(11,61,145,0); }
+    }
+    .flash { animation: sectionFlash 900ms ease-out; border-radius:12px; }
+
+    /* Ajuste específico para hvca3 */
+    .hero-banner .slide[alt="HVAC ASTANA 3"]{ object-position: center 20%; }
+
+    /* Tablets: da más presencia a las imágenes */
     @media (max-width:980px){
       .services-grid{grid-template-columns:repeat(2,1fr)}
       .hero-left{order:2;padding:18px}
       .hero-banner{order:1}
-      .hero-banner .slides{ height:220px; }
+      .hero-banner .slides{ height:280px; } /* sube altura en tablet */
       .header-inner{padding:10px}
       .contact-grid{gap:10px}
       .faq-grid{grid-template-columns:1fr}
+      .services-carousel .slide img{ max-height:460px; } /* más altas en tablet */
+      .services-carousel .thumb{ width:80px; height:52px; }
+      .detalle-img.refrigeracion { object-position: center; }
     }
+
+    /* Móviles: imágenes grandes, tipografía ligeramente mayor, layout aireado */
     @media (max-width:540px){
-      .hero-banner .slides{ height:180px; }
-      .carousel-btn{ width:40px;height:40px;font-size:20px; }
+      body{ font-size:16px; } /* mejora legibilidad */
+      header{ top:8px }
+      nav.primary{ display:none }
+
+      .hero-banner .slides{ height:340px; } /* banner más alto en móvil */
+      .hero-banner .slide{ object-position:center; }
+
+      .brand h1{ font-size:18px }
+      .eyebrow{ font-size:14px }
+      .hero h2{ font-size:28px }
+      .hero p{ font-size:15px }
+
+      .services-grid{ grid-template-columns:1fr; gap:14px }
+      .service{ padding:16px }
+      .service .icon{ width:60px; height:60px; flex:0 0 60px }
+
+      .detalle-img{ border-radius:12px }
+      /* En detalles, usa cover con altura mínima para que no se vean "chicas" */
+      details .detalle-contenido .detalle-img{
+        width:100%;
+        height: clamp(220px, 40vh, 420px);
+        object-fit:cover;
+      }
+
+      .services-carousel .slide img{
+        max-height:none;     /* libera altura */
+        height: clamp(240px, 45vh, 520px); /* asegura imagen grande en móvil */
+        object-fit:contain;  /* evita recortes dentro del carrusel de servicios */
+      }
+
+      .carousel-btn{ width:42px; height:42px; font-size:22px; }
+      .services-carousel .thumb{ width:68px; height:46px; }
+
       .contact-item{ width:100%; border-radius:12px; padding:10px 12px; }
       .contact-grid{ flex-direction:column; align-items:stretch; gap:10px; }
       .contact-copy .label, .contact-copy .meta{ white-space:normal; }
-      nav.primary{display:none}
-      .brand h1{font-size:16px}
-      header{top:8px}
-      .services-grid{grid-template-columns:1fr}
+
+      .quick-contact { right: 14px; bottom: 14px; width:58px; height:58px; }
+      .quick-contact .icon { font-size:20px; }
+
+      .back-to-top{ left:14px; bottom:14px; width:52px; height:52px; }
     }
 
     .muted{color:var(--muted)}
-    .highlight{box-shadow:0 10px 40px rgba(2,35,70,0.08);border:1px solid rgba(2,35,70,0.12);transition:box-shadow 300ms, border 300ms}
-
     .muted-italic{color:var(--muted);font-style:italic}
     a.ghost{color:var(--brand-700);text-decoration:underline;font-weight:700}
+
+    .form-card{background:var(--card);border-radius:12px;padding:18px;border:1px solid rgba(2,6,23,0.04);box-shadow:var(--shadow-1);margin-top:16px}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .form-grid .full{grid-column:1 / -1}
+    .input{
+      width:100%;
+      padding:10px 12px;
+      border-radius:10px;
+      border:1px solid rgba(2,6,23,0.10);
+      background:#fff;
+      font-family:inherit;
+      font-size:14px;
+      color:#0b1220;
+      transition:border-color 160ms ease, box-shadow 160ms ease;
+    }
+    .input:focus{
+      outline:none;
+      border-color:rgba(11,61,145,0.30);
+      box-shadow:0 0 0 4px rgba(11,61,145,0.10);
+    }
+    .back-to-top{
+      position:fixed;
+      left:18px;
+      bottom:18px;
+      z-index:140;
+      width:56px;
+      height:56px;
+      border-radius:999px;
+      background:linear-gradient(180deg,var(--accent),var(--accent-2));
+      color:#fff;
+      display:grid;
+      place-items:center;
+      text-decoration:none;
+      font-weight:800;
+      box-shadow:0 12px 36px rgba(2,35,70,0.22);
+      transition:transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+    .back-to-top:hover{
+      transform:translateY(-6px) scale(1.03);
+      box-shadow:0 20px 48px rgba(2,35,70,0.28);
+      background:linear-gradient(180deg,#0e4aa8,#01283f);
+    }
+
+    /* Ajuste hvca3 completa con bandas (opcional) */
+    /*
+    .hero-banner .slide[alt="HVAC ASTANA 3"]{
+      object-fit: contain;
+      background: linear-gradient(180deg,#fff,#f8fbff);
+    }
+    */
   </style>
 </head>
 <body>
@@ -334,9 +648,9 @@
 
       <div class="hero-banner" role="region" aria-label="Galería de servicios ASTANA">
         <div class="slides">
-          <img src="hvca1.jpeg" alt="HVAC ASTANA 1" class="slide" />
-          <img src="hvca2.jpeg" alt="HVAC ASTANA 2" class="slide" />
-          <img src="hvca3.jpeg" alt="HVAC ASTANA 3" class="slide" />
+          <img src="hvca1.jpeg" alt="HVAC ASTANA 1" class="slide" aria-hidden="false" />
+          <img src="hvca2.jpeg" alt="HVAC ASTANA 2" class="slide" aria-hidden="true" />
+          <img src="hvca3.jpeg" alt="HVAC ASTANA 3" class="slide" aria-hidden="true" />
         </div>
 
         <button class="carousel-btn prev" aria-label="Anterior">‹</button>
@@ -404,7 +718,7 @@
         </summary>
         <div class="detalle-contenido">
           <img src="fotores.jpeg" alt="Instalación Residencial Grupo Astana" class="detalle-img" />
-          <p class="muted">Soluciones eficientes y silenciosas para tu hogar, con asesoría en ahorro energético.</p>
+          <p class="muted">Soluciones eficientes para tu hogar, con asesoría en ahorro energético.</p>
           <div style="margin-top:8px;display:flex;gap:8px">
             <a class="btn" href="#contacto">Pedir asesoría gratis</a>
             <button class="btn secondary" onclick="openSchedule('residencial')">Ver plan de instalación</button>
@@ -438,7 +752,7 @@
           </details>
           <details>
             <summary>¿Ofrecen financiamiento?</summary>
-            <div class="detalle-contenido">Actualmente no ofrecemos financiamiento directo. Consultanos para ver alternativas y opciones de pago disponibles.</div>
+            <div class="detalle-contenido">Financiamiento indirecto con caja popular.</div>
           </details>
         </div>
       </div>
@@ -448,9 +762,24 @@
       <h2 id="electricidad-heading">Electricidad</h2>
       <p class="muted">Instalaciones residenciales, comerciales e industriales; puestas a tierra y sistemas de protección.</p>
 
+      <details>
+        <summary>Servicios</summary>
+        <div class="detalle-contenido">
+          <img src="ele1.jpeg" alt="Instalaciones eléctricas" class="detalle-img" />
+          <p class="muted">Instalaciones residenciales, comerciales e industriales; puestas a tierra y sistemas de protección.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>Instalación y mantenimiento</summary>
+        <div class="detalle-contenido">
+          <img src="ele2.jpeg" alt="Instalación y mantenimiento eléctrico" class="detalle-img" />
+          <p class="muted">Servicios de instalación, mantenimiento preventivo y correctivo para sistemas eléctricos; actualización de tableros y protección.</p>
+        </div>
+      </details>
+
       <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
         <a class="btn" href="#contacto">Solicitar revisión eléctrica</a>
-        <button class="btn secondary" onclick="showTip('tierra')">¿Qué es puesta a tierra?</button>
       </div>
     </section>
 
@@ -459,21 +788,57 @@
       <p class="muted">Instalación y mantenimiento de sistemas de refrigeración comercial e industrial.</p>
 
       <details>
-        <summary>Contratos de mantenimiento</summary>
-        <div class="detalle-contenido">Paquetes mensuales y anuales con seguimiento remoto y visitas programadas.</div>
+        <summary>Refrigeración Comercial y Línea Blanca</summary>
+        <div class="detalle-contenido full-bleed">
+          <img src="refcom.jpeg" alt="Refrigeración Comercial y Línea Blanca - Grupo Astana" class="detalle-img refrigeracion" />
+          <div style="padding:14px 18px;">
+            <p class="muted">Asesoría, venta e instalación de equipos comerciales; mantenimiento preventivo y correctivo para supermercados, restaurantes, hoteles e industrias alimentarias.</p>
+          </div>
+        </div>
       </details>
     </section>
 
     <section id="otros-servicios" class="card" aria-labelledby="otros-heading">
       <h2 id="otros-heading">Otros Servicios</h2>
-      <ul style="margin-top:10px;color:var(--muted)">
-        <li>Tablaroca</li>
-        <li>Fontanería</li>
-        <li>Automatización</li>
-        <li>Control Eléctrico</li>
-        <li>Mantenimiento Industrial</li>
-      </ul>
 
+      <div class="services-carousel" aria-roledescription="carrusel de servicios" aria-label="Carrusel de otros servicios">
+        <button class="nav prev" aria-label="Anterior servicio">‹</button>
+
+        <div class="viewport" style="overflow:hidden;position:relative;">
+          <div class="slides" role="list">
+            <div class="slide" role="listitem" aria-hidden="false">
+              <img src="carru1.jpeg" alt="Fontanería y mantenimiento" />
+              <div class="caption">Fontanería · Mantenimiento preventivo y reparaciones</div>
+            </div>
+
+            <div class="slide" role="listitem" aria-hidden="true">
+              <img src="carru2.jpeg" alt="Automatización y control eléctrico" />
+              <div class="caption">Automatización y Control Eléctrico · Soluciones a medida</div>
+            </div>
+
+            <div class="slide" role="listitem" aria-hidden="true">
+              <img src="carru3.jpeg" alt="Tablaroca - ejemplo de trabajo" />
+              <div class="caption">Construcción ligera · Tablaroca · Promoción 10% Diciembre</div>
+            </div>
+          </div>
+        </div>
+
+        <button class="nav next" aria-label="Siguiente servicio">›</button>
+
+        <div class="thumbs" role="tablist" aria-label="Miniaturas del carrusel">
+          <div class="thumb" role="tab" aria-selected="true" data-index="0" tabindex="0">
+            <img src="carru1.jpeg" alt="Miniatura Fontanería" />
+          </div>
+          <div class="thumb" role="tab" aria-selected="false" data-index="1" tabindex="0">
+            <img src="carru2.jpeg" alt="Miniatura Automatización" />
+          </div>
+          <div class="thumb" role="tab" aria-selected="false" data-index="2" tabindex="0">
+            <img src="carru3.jpeg" alt="Miniatura Tablaroca" />
+          </div>
+        </div>
+      </div>
+
+      <p style="margin-top:12px;color:var(--muted)">También ofrecemos Tablaroca, Fontanería, Automatización, Control Eléctrico y Mantenimiento Industrial.</p>
       <p style="margin-top:12px"><a class="ghost" href="#contacto">Solicita una evaluación integral</a></p>
     </section>
 
@@ -484,7 +849,6 @@
         <div class="contact-item" role="listitem" aria-label="Dirección General">
           <a class="contact-link" href="https://wa.me/message/QLHEER2APBZHD1" target="_blank" rel="noopener">
             <div class="contact-icon" aria-hidden="true">
-              <!-- Icono SVG de persona (monito) -->
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5z" fill="white" opacity="0.95"/>
                 <path d="M3 21c0-3.866 3.582-7 9-7s9 3.134 9 7v1H3v-1z" fill="white" opacity="0.95"/>
@@ -497,11 +861,9 @@
           </a>
         </div>
 
-        <!-- Bloque actualizado: Atención a Clientes con icono de auriculares y etiqueta en mayúsculas -->
         <div class="contact-item" role="listitem" aria-label="Atencion a Clientes">
           <a class="contact-link" href="https://wa.me/message/CSUINW3LM5KXF1" target="_blank" rel="noopener">
             <div class="contact-icon" aria-hidden="true">
-              <!-- Icono SVG de auriculares / diadema -->
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 3C7.03 3 3 7.03 3 12v3a3 3 0 0 0 3 3h1a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1H6v-1a6 6 0 0 1 12 0v1h-2a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h1a3 3 0 0 0 3-3v-3c0-4.97-4.03-9-9-9z" fill="white" opacity="0.95"/>
                 <path d="M6 15H5a1 1 0 0 1-1-1v-1h2v2zM19 15h-1v-2h2v1a1 1 0 0 1-1 1z" fill="white" opacity="0.95"/>
@@ -532,326 +894,162 @@
             <div class="contact-icon" aria-hidden="true">📍</div>
             <div class="contact-copy">
               <div class="label">Ubicación</div>
-              <div class="meta">El Zapote del Valle, Jal · Lun-Vie 8:30–18:00 · Sáb 8:30–14:30</div>
+              <div class="meta">Guadalajara, Jalisco, México</div>
             </div>
           </a>
         </div>
       </div>
 
-      <form id="contactForm" style="margin-top:14px;display:grid;gap:8px" onsubmit="submitForm(event)">
-        <input type="text" id="name" name="name" placeholder="Tu nombre" required style="padding:10px;border-radius:10px;border:1px solid rgba(2,6,23,0.06)">
-        <input type="email" id="email" name="email" placeholder="Tu correo" required style="padding:10px;border-radius:10px;border:1px solid rgba(2,6,23,0.06)">
-        <textarea id="msg" name="msg" placeholder="Mensaje o consulta" rows="3" style="padding:10px;border-radius:10px;border:1px solid rgba(2,6,23,0.06)"></textarea>
-        <div style="display:flex;gap:8px">
-          <button class="btn" type="submit">Enviar</button>
-          <button type="button" class="btn secondary" onclick="prefillDemo()">Ejemplo</button>
-        </div>
-        <div id="formResult" aria-live="polite" style="color:var(--muted);font-size:13px"></div>
-      </form>
+      <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
+        <!-- sin botones adicionales -->
+      </div>
+    </section>
 
+    <section id="formulario" class="form-card" aria-labelledby="formulario-heading">
+      <h2 id="formulario-heading" style="margin:0 0 8px 0;font-size:18px;color:var(--brand-700)">Formulario de contacto</h2>
+      <p class="muted" style="margin:0 0 10px 0">Envíanos tu mensaje y te contactamos.</p>
+      <form action="#" method="post" novalidate>
+        <div class="form-grid">
+          <div>
+            <label for="nombre" style="font-weight:700;color:var(--brand-700);font-size:13px">Nombre</label>
+            <input id="nombre" name="nombre" type="text" class="input" placeholder="Tu nombre" required>
+          </div>
+          <div>
+            <label for="email" style="font-weight:700;color:var(--brand-700);font-size:13px">Correo</label>
+            <input id="email" name="email" type="email" class="input" placeholder="tucorreo@ejemplo.com" required>
+          </div>
+          <div class="full">
+            <label for="mensaje" style="font-weight:700;color:var(--brand-700);font-size:13px">Mensaje</label>
+            <textarea id="mensaje" name="mensaje" rows="4" class="input" placeholder="Cuéntanos qué necesitas" required></textarea>
+          </div>
+        </div>
+        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+          <button type="submit" class="btn">Enviar</button>
+          <a href="#contacto" class="btn secondary">Ver datos de contacto</a>
+        </div>
+      </form>
     </section>
   </main>
 
-  <footer style="padding:18px 20px;margin-top:18px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
-    <div class="footer-left">&copy; 2025 ASTANA</div>
-    <nav class="footer-nav" aria-label="Enlaces del pie de página" style="display:flex;gap:12px">
-      <a href="#inicio">Inicio</a>
-      <a href="#quienes">Quiénes somos</a>
-      <a href="#contacto">Contacto</a>
-    </nav>
-  </footer>
+  <a class="back-to-top" href="#inicio" aria-label="Ir al inicio">↑</a>
 
-  <a class="float-cta" href="https://wa.me/message/QLHEER2APBZHD1" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp Dirección General">
-    💬 <span>Contacto rápido</span>
+  <a class="quick-contact" href="https://wa.me/message/QLHEER2APBZHD1" target="_blank" rel="noopener" aria-label="Contacto rápido por WhatsApp">
+    <span class="sr-label">Contacto rápido</span>
+    <span class="icon">💬</span>
+    <span class="badge" aria-hidden="true">¡</span>
   </a>
 
-  <button class="to-top" aria-label="Ir arriba" title="Ir arriba" onclick="scrollToTop()">↑</button>
+  <footer style="max-width:var(--max-width);margin:24px auto;padding:12px 20px;color:var(--muted);text-align:center">
+    © <span id="year"></span> ASTANA · Climatización y Energía
+  </footer>
 
   <script>
-    (function() {
-      const DURATION = 700;
-      const HIGHLIGHT_MS = 1800;
+    document.getElementById('year').textContent = new Date().getFullYear();
 
-      function easeInOutQuad(t){ return t<0.5 ? 2*t*t : -1+(4-2*t)*t; }
-      function getHeaderOffset(){ const header = document.querySelector('header'); return header ? header.offsetHeight + 8 : 0; }
-
-      function scrollToY(targetY, duration){
-        const startY = window.scrollY || window.pageYOffset;
-        const diff = targetY - startY;
-        const start = performance.now();
-        return new Promise(resolve=>{
-          function frame(now){
-            const elapsed = now - start;
-            const progress = Math.min(1, elapsed / duration);
-            const eased = easeInOutQuad(progress);
-            window.scrollTo(0, Math.round(startY + diff*eased));
-            if(progress < 1) requestAnimationFrame(frame);
-            else resolve();
-          }
-          requestAnimationFrame(frame);
-        });
-      }
-
-      function highlightElement(el, ms){
-        if(!el) return;
-        el.classList.remove('highlight');
-        void el.offsetWidth;
-        el.classList.add('highlight');
-        clearTimeout(el._highlightTimeout);
-        el._highlightTimeout = setTimeout(()=>el.classList.remove('highlight'), ms);
-      }
-
-      async function handleAnchorClick(e){
-        const link = e.currentTarget;
-        const href = link.getAttribute('href');
-        if(!href || href.charAt(0) !== '#') return;
-        const id = href.slice(1);
-        const target = document.getElementById(id);
-        if(!target) return;
-        e.preventDefault();
-
-        const detailsParent = target.closest('details');
-        if(detailsParent && !detailsParent.open){
-          detailsParent.open = true;
-          const content = detailsParent.querySelector('.detalle-contenido');
-          if(content){
-            content.style.maxHeight = content.scrollHeight + 'px';
-            detailsParent.setAttribute('data-open','true');
-          }
-          await new Promise(r=>setTimeout(r,120));
-        }
-
-        const rect = target.getBoundingClientRect();
-        const offsetTop = window.scrollY + rect.top - getHeaderOffset() - 12;
-        await scrollToY(offsetTop, DURATION);
-
-        highlightElement(target, HIGHLIGHT_MS);
-
-        if(history.pushState) history.pushState(null,'','#'+id);
-        else location.hash = '#'+id;
-      }
-
-      function initAnchors(){
-        document.querySelectorAll('a[href^="#"]').forEach(a=>{
-          const href = a.getAttribute('href');
-          if(!href || href === '#') return;
-          a.addEventListener('click', handleAnchorClick, {passive:false});
-        });
-      }
-
-      function initDetails(){
-        document.querySelectorAll('details').forEach(detail=>{
-          const content = detail.querySelector('.detalle-contenido');
-          if(content){
-            detail.setAttribute('data-open', detail.open ? 'true' : 'false');
-            content.style.maxHeight = detail.open ? content.scrollHeight + 'px' : '0px';
-          }
-          detail.addEventListener('toggle', ()=>{
-            const c = detail.querySelector('.detalle-contenido');
-            if(!c) return;
-            setTimeout(()=>{
-              if(detail.open){
-                c.style.maxHeight = c.scrollHeight + 'px';
-                detail.setAttribute('data-open','true');
-              } else {
-                c.style.maxHeight = '0px';
-                detail.setAttribute('data-open','false');
-              }
-            }, 32);
-          });
-          detail.querySelectorAll('img').forEach(img=>{
-            if(!img.complete){
-              img.addEventListener('load', ()=>{
-                const c = detail.querySelector('.detalle-contenido');
-                if(detail.open && c) c.style.maxHeight = c.scrollHeight + 'px';
-              });
-            }
-          });
-        });
-      }
-
-      document.addEventListener('DOMContentLoaded', ()=>{
-        initAnchors();
-        initDetails();
-
-        // clickable service cards scrolling to sections
-        document.querySelectorAll('.service').forEach(card=>{
-          card.addEventListener('click', ()=> {
-            const t = card.dataset.target;
-            if(!t) return;
-            const el = document.querySelector(t);
-            if(!el) return;
-            el.scrollIntoView({behavior:'smooth', block:'start'});
-            highlightElement(el, 1400);
-          });
-          card.addEventListener('keydown', (e)=>{
-            if(e.key === 'Enter' || e.key === ' ') card.click();
-          });
-        });
-
-      });
-
-      window.addEventListener('load', ()=>{
-        const hash = location.hash;
-        if(hash){
-          const id = hash.slice(1);
-          const el = document.getElementById(id);
-          if(el){
-            setTimeout(async ()=>{
-              const detailsParent = el.closest('details');
-              if(detailsParent && !detailsParent.open){
-                detailsParent.open = true;
-                const content = detailsParent.querySelector('.detalle-contenido');
-                if(content){
-                  content.style.maxHeight = content.scrollHeight + 'px';
-                  detailsParent.setAttribute('data-open','true');
-                }
-                await new Promise(r=>setTimeout(r,120));
-              }
-              const rect = el.getBoundingClientRect();
-              const target = window.scrollY + rect.top - getHeaderOffset() - 12;
-              await scrollToY(target, DURATION);
-              highlightElement(el, 1800);
-            }, 120);
-          }
+    document.querySelectorAll('details').forEach(function(d){
+      d.addEventListener('toggle', function(){
+        if (d.open) {
+          d.setAttribute('data-open', 'true');
+        } else {
+          d.removeAttribute('data-open');
         }
       });
+    });
 
+    (function(){
+      const slides = Array.from(document.querySelectorAll('.hero-banner .slide'));
+      const indicators = Array.from(document.querySelectorAll('.carousel-indicators .indicator'));
+      const prevBtn = document.querySelector('.hero-banner .carousel-btn.prev');
+      const nextBtn = document.querySelector('.hero-banner .carousel-btn.next');
+      let idx = slides.findIndex(s => s.getAttribute('aria-hidden') === 'false');
+      if (idx < 0) idx = 0;
+
+      function show(i){
+        slides.forEach((s, k) => s.setAttribute('aria-hidden', k === i ? 'false' : 'true'));
+        indicators.forEach((ind, k) => ind.setAttribute('aria-selected', k === i ? 'true' : 'false'));
+        idx = i;
+      }
+
+      prevBtn && prevBtn.addEventListener('click', () => show((idx - 1 + slides.length) % slides.length));
+      nextBtn && nextBtn.addEventListener('click', () => show((idx + 1) % slides.length));
+      indicators.forEach((ind, k) => ind.addEventListener('click', () => show(k)));
+
+      setInterval(() => { show((idx + 1) % slides.length); }, 4500);
     })();
 
-    // Carrusel banner automático (mejorado: pausa en foco)
     (function(){
-      const carousel = document.querySelector('.hero-banner');
-      if(!carousel) return;
-
+      const carousel = document.querySelector('.services-carousel');
+      if (!carousel) return;
+      const slidesWrap = carousel.querySelector('.slides');
       const slides = Array.from(carousel.querySelectorAll('.slide'));
-      const prevBtn = carousel.querySelector('.carousel-btn.prev');
-      const nextBtn = carousel.querySelector('.carousel-btn.next');
-      const indicators = Array.from(carousel.querySelectorAll('.indicator'));
+      const prev = carousel.querySelector('.nav.prev');
+      const next = carousel.querySelector('.nav.next');
+      const thumbs = Array.from(carousel.querySelectorAll('.thumb'));
+      let index = slides.findIndex(s => s.getAttribute('aria-hidden') === 'false');
+      if (index < 0) index = 0;
 
-      let index = 0;
-      const INTERVAL = 3800;
-      let timer = null;
-      let isPaused = false;
-
-      function show(i, focusIndicator = true){
-        i = (i + slides.length) % slides.length;
-        slides.forEach((s,idx)=>{
-          const hidden = idx !== i;
-          s.setAttribute('aria-hidden', hidden ? 'true' : 'false');
-        });
-        indicators.forEach((btn,idx)=>{
-          const sel = idx === i;
-          btn.setAttribute('aria-selected', sel ? 'true' : 'false');
-          if(sel && focusIndicator) btn.focus({preventScroll:true});
-        });
+      function update(i){
+        slides.forEach((s,k) => s.setAttribute('aria-hidden', k === i ? 'false' : 'true'));
+        thumbs.forEach((t,k) => t.setAttribute('aria-selected', k === i ? 'true' : 'false'));
+        slidesWrap.style.transform = `translateX(-${i * 100}%)`;
         index = i;
       }
 
-      function next(){ show(index + 1); }
-      function prev(){ show(index - 1); }
+      prev && prev.addEventListener('click', () => update((index - 1 + slides.length) % slides.length));
+      next && next.addEventListener('click', () => update((index + 1) % slides.length));
+      thumbs.forEach((t,k) => t.addEventListener('click', () => update(k)));
+      update(index);
 
-      function startTimer(){
-        stopTimer();
-        timer = setInterval(()=>{ if(!isPaused) next(); }, INTERVAL);
-      }
-      function stopTimer(){ if(timer) { clearInterval(timer); timer = null; } }
-
-      nextBtn.addEventListener('click', ()=>{
-        next();
-        startTimer();
-      });
-      prevBtn.addEventListener('click', ()=>{
-        prev();
-        startTimer();
-      });
-
-      indicators.forEach(btn=>{
-        btn.addEventListener('click', (e)=>{
-          const i = Number(btn.dataset.index);
-          show(i, false);
-          startTimer();
-        });
-        btn.addEventListener('keydown', (e)=>{
-          if(e.key === 'ArrowLeft') prev();
-          if(e.key === 'ArrowRight') next();
-        });
-      });
-
-      carousel.addEventListener('mouseenter', ()=>{ isPaused = true; });
-      carousel.addEventListener('mouseleave', ()=>{ isPaused = false; });
-      carousel.addEventListener('focusin', ()=>{ isPaused = true; });
-      carousel.addEventListener('focusout', ()=>{ isPaused = false; });
-
-      slides.forEach(s=> s.setAttribute('aria-hidden','true'));
-      show(0);
-      startTimer();
-
+      setInterval(() => { update((index + 1) % slides.length); }, 5500);
     })();
 
-    // helpers: floating interactions, form demo, scroll top, tips
-    function scrollToTop(){
-      const start = window.scrollY || window.pageYOffset;
-      const startT = performance.now();
-      const duration = 550;
-      function tick(now){
-        const p = Math.min(1, (now - startT)/duration);
-        const eased = p < 0.5 ? 2*p*p : -1+(4-2*p)*p;
-        window.scrollTo(0, Math.round(start - start*eased));
-        if(p < 1) requestAnimationFrame(tick);
-      }
-      requestAnimationFrame(tick);
-    }
-
     function openSchedule(type){
-      const msg = type === 'comercial' ? 'Ha seleccionado agendar visita comercial.' : 'Ha seleccionado agendar visita residencial.';
-      alert(msg + '\nTe dirigimos al formulario de contacto.');
-      document.getElementById('contactForm').scrollIntoView({behavior:'smooth', block:'center'});
+      alert('Agendar visita: ' + type);
     }
 
-    function showTip(key){
-      if(key === 'tierra'){
-        alert('Puesta a tierra: conexión segura que desvía corrientes a tierra para proteger personas y equipos.');
-      }
-    }
-
-    function prefillDemo(){
-      document.getElementById('name').value = 'Ricardo';
-      document.getElementById('email').value = 'ricardo@ejemplo.com';
-      document.getElementById('msg').value = 'Hola, quisiera un presupuesto para instalación de 3 paneles solares.';
-    }
-
-    function submitForm(e){
-      e.preventDefault();
-      const name = document.getElementById('name').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const msg = document.getElementById('msg').value.trim();
-      const result = document.getElementById('formResult');
-      if(!name || !email){
-        result.textContent = 'Completa nombre y correo.';
-        return;
-      }
-      // Simulación de envío
-      result.textContent = 'Enviando...';
-      setTimeout(()=> {
-        result.textContent = 'Gracias ' + name + '. Tu mensaje fue recibido. Te contactaremos pronto.';
-        document.getElementById('contactForm').reset();
-      }, 900);
-    }
-
-    // small accessibility tweak: keyboard shortcuts
-    document.addEventListener('keydown', (e)=>{
-      // "t" to jump to contact
-      if(e.key === 't' || e.key === 'T'){
-        const el = document.getElementById('contacto');
-        if(el){ el.scrollIntoView({behavior:'smooth', block:'start'}); highlight(el); }
-      }
+    document.querySelectorAll('.service').forEach(function(card){
+      card.addEventListener('click', function(){
+        const target = card.getAttribute('data-target');
+        if (target) {
+          const el = document.querySelector(target);
+          if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+          if (el && el.classList) {
+            el.classList.add('flash');
+            setTimeout(()=>el.classList.remove('flash'), 900);
+          }
+          const navLink = document.querySelector(`nav.primary a[href="${target}"]`);
+          if (navLink) {
+            document.querySelectorAll('nav.primary a').forEach(a => a.classList.remove('active'));
+            navLink.classList.add('active');
+          }
+        }
+      });
+      card.addEventListener('keypress', function(e){
+        if (e.key === 'Enter' || e.key === ' ') {
+          card.click();
+        }
+      });
     });
 
-    function highlight(el){
-      el.classList.add('highlight');
-      setTimeout(()=>el.classList.remove('highlight'), 1600);
-    }
+    (function(){
+      const navLinks = document.querySelectorAll('nav.primary a');
+      navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+          const href = link.getAttribute('href');
+          if (href && href.startsWith('#')) {
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) {
+              target.scrollIntoView({behavior:'smooth', block:'start'});
+              navLinks.forEach(a => a.classList.remove('active'));
+              link.classList.add('active');
+              target.classList.add('flash');
+              setTimeout(()=>target.classList.remove('flash'), 900);
+            }
+          }
+        });
+      });
+    })();
   </script>
 </body>
 </html>
